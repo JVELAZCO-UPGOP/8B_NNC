@@ -1,4 +1,4 @@
-const listaVeterinarias = document.getElementById('lista-veterinarias');
+const listaDuenos = document.getElementById('lista-duenos');
 const pais = document.getElementById('pais');
 const nombre = document.getElementById('nombre');
 const identificacion = document.getElementById('identificacion');
@@ -7,7 +7,7 @@ const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
 const indice = document.getElementById('indice');
 
-let veterinarias = [
+let duenos = [
     {
         nombre: "Noraly",
         apellido: "Niño",
@@ -25,13 +25,13 @@ let veterinarias = [
 ];
 
 
-function listarVeterinarias() {
-    const htmlVeterinarias = veterinarias.map((veterinaria, index)=>`<tr>
+function listarDuenos() {
+    const htmlDuenos = duenos.map((dueno, index)=>`<tr>
     <th scope="row">${index}</th>
-    <td>${veterinaria.identificacion}</td>
-    <td>${veterinaria.pais}</td>
-    <td>${veterinaria.nombre}</td>
-    <td>${veterinaria.apellido}</td>
+    <td>${dueno.identificacion}</td>
+    <td>${dueno.pais}</td>
+    <td>${dueno.nombre}</td>
+    <td>${dueno.apellido}</td>
     <td>
     <div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-info editar"><i class="far fa-edit"></i></button>
@@ -40,7 +40,7 @@ function listarVeterinarias() {
     </td>
 </tr>`).join("");
 
-listaVeterinarias.innerHTML =htmlVeterinarias;
+listaDuenos.innerHTML =htmlDuenos;
 Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=> botonEditar.onclick = editar(index));
 Array.from(document.getElementsByClassName('eliminar')).forEach((botonEliminar, index)=> botonEliminar.onclick = eliminar(index));
 
@@ -60,15 +60,15 @@ function enviardatos(evento){
     const accion = btnGuardar.innerHTML;
     switch(accion){
         case 'Editar':
-            veterinarias[indice.value]=datos;
+            duenos[indice.value]=datos;
             break;
             default:
-            veterinarias.push(datos);
+            duenos.push(datos);
             break;
     }
     
     
-    listarVeterinarias();
+    listarDuenos();
     reserModal();
 }
 
@@ -76,14 +76,13 @@ function editar(index) {
     return function handler(){
         btnGuardar.innerHTML='Editar'
         $('#exampleModalCenter').modal('toggle');
-        const veterinaria = veterinarias[index];
-
-
-        nombre.value = veterinaria.nombre;
-        apellido.value = veterinaria.apellido;
-        pais.value = veterinaria.pais;
-        identificacion.value = veterinaria.identificacion;
+        const dueno = duenos[index];
         indice.value=index;
+        nombre.value = dueno.nombre;
+        apellido.value = dueno.apellido;
+        pais.value = dueno.pais;
+        identificacion.value = dueno.identificacion;
+        
         
 
     }
@@ -99,12 +98,12 @@ function reserModal(){
 
 function eliminar(index) {
     return function clickEnEliminar() {
-    veterinarias = veterinarias.filter((veterinaria, indiceVeterinaria)=>indiceVeterinaria !== index);
-    listarVeterinarias();
+    duenos = duenos.filter((dueno, indiceDuenos)=>indiceDuenos !== index);
+    listarDuenos();
     }
 }
 
-listarVeterinarias();
+listarDuenos();
 
 form.onsubmit = enviardatos;
 btnGuardar.onclick = enviardatos;
