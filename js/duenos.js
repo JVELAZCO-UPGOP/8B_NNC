@@ -6,6 +6,9 @@ const apellido = document.getElementById('apellido');
 const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
 const indice = document.getElementById('indice');
+const btneliminar = document.getElementById('btn-eliminar2');
+const lbtitulo = document.getElementById('exampleModalCenterTitle');
+const btnCerrar = document.getElementById('btn-cerrar1');
 
 let duenos = [
     {
@@ -75,6 +78,7 @@ function enviardatos(evento){
 function editar(index) {
     return function handler(){
         btnGuardar.innerHTML='Editar'
+        lbtitulo.innerHTML = 'Editar Dueño'
         $('#exampleModalCenter').modal('toggle');
         const dueno = duenos[index];
         indice.value=index;
@@ -83,24 +87,42 @@ function editar(index) {
         pais.value = dueno.pais;
         identificacion.value = dueno.identificacion;
         
+        $("#btn-x").on("click",function() {
+            resetModal();
+            });
+        
+        $("#btn-cerrar1").on("click",function() {
+            resetModal();
+        });
         
 
     }
 }
 
-function reserModal(){
+function resetModal(){
     nombre.value ='';
     apellido.value='';
-    pais.value='';
+    pais.value='País';
     identificacion.value='';
     btnGuardar.innerHTML='Crear';
+    lbtitulo.innerHTML = 'Nuevo Veterinario'
 }
 
 function eliminar(index) {
     return function clickEnEliminar() {
-    duenos = duenos.filter((dueno, indiceDuenos)=>indiceDuenos !== index);
-    listarDuenos();
-    }
+        $('#exampleModalCenter2').modal('toggle');
+        const dueno = duenos[index];
+        nombre.value = dueno.nombre;
+        apellido.value = dueno.apellido;
+        pais.value = dueno.pais;
+        identificacion.value = dueno.identificacion;
+        indice.value=index;
+
+    $("#btn-eliminar2").on("click",function() {
+        duenos = duenos.filter((dueno, indiceDueno)=>indiceDueno!== index);
+        listarDuenos();
+    });
+}
 }
 
 listarDuenos();

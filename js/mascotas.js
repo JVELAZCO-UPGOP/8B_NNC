@@ -5,6 +5,7 @@ const indice = document.getElementById('indice');
 const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
 const btneliminar = document.getElementById('btn-eliminar2');
+const btnCerrar = document.getElementById('btn-cerrar1');
 const lbtitulo = document.getElementById('exampleModalCenterTitle');
 const listaMascotas = document.getElementById('lista-mascotas');
 
@@ -39,6 +40,7 @@ const htmlMascotas = mascotas.map((mascota, index)=>`<tr>
     listaMascotas.innerHTML = htmlMascotas;
     Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=>botonEditar.onclick = editar(index));
     Array.from(document.getElementsByClassName('eliminar')).forEach((botonEliminar, index)=>botonEliminar.onclick = eliminar(index));
+
 }
 
 function enviarDatos(evento) {
@@ -62,7 +64,7 @@ resetModal();
 }
 
 function editar(index) {
-return function cuandoCliqueo() {
+return function DarClick() {
     btnGuardar.innerHTML = 'Editar'
     lbtitulo.innerHTML = 'Editar Mascota'
     $('#exampleModalCenter').modal('toggle');
@@ -71,33 +73,48 @@ return function cuandoCliqueo() {
     dueno.value = mascota.dueno;
     tipo.value = mascota.tipo;
     indice.value = index;
+
+    
+$("#btn-x").on("click",function() {
+    resetModal();
+    });
+
+$("#btn-cerrar1").on("click",function() {
+    resetModal();
+});
+
 }
 }
 
 function resetModal() {
 nombre.value = '';
-dueno.value = '';
-tipo.value = '';
+dueno.value = 'Propietario';
+tipo.value = 'Tipo';
 indice.value = '';
 btnGuardar.innerHTML = 'Crear'
+lbtitulo.innerHTML = 'Nueva Mascota'
 }
 
-function eliminar(index) {
-return function clickEnEliminar() {
-    $('#exampleModalCenter2').modal('toggle');
-    const accion = btneliminar.innerHTML;
-    switch(accion) {
-        case 'Eliminar':
-            mascotas = mascotas.filter((mascota, indiceMascota)=>indiceMascota !== index);
-            listarMascotas();
-        break;
-        default:
-        mascotas.push(datos);
-        break;
-    }
+
+
+function eliminar(index){
+    return function clickEnEliminar() {
+        $('#exampleModalCenter2').modal('toggle');
+        const mascota = mascotas[index];
+        nombre.value = mascota.nombre;
+        dueno.value = mascota.dueno;
+        tipo.value = mascota.tipo;
+        indice.value = index;
+
+    $("#btn-eliminar2").on("click",function() {
+        mascotas = mascotas.filter((mascota, indiceMascota)=>indiceMascota !== index);
+        listarMascotas();
+    });
+}
     
 }
-}
+
+
 
 
 listarMascotas();

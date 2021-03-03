@@ -6,6 +6,11 @@ const apellido = document.getElementById('apellido');
 const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
 const indice = document.getElementById('indice');
+const btneliminar = document.getElementById('btn-eliminar2');
+const lbtitulo = document.getElementById('exampleModalCenterTitle');
+const btnCerrar = document.getElementById('btn-cerrar1');
+
+
 
 let veterinarias = [
     {
@@ -73,36 +78,59 @@ function enviardatos(evento){
 }
 
 function editar(index) {
-    return function handler(){
+    return function DarClick(){
         btnGuardar.innerHTML='Editar'
+        lbtitulo.innerHTML = 'Editar Veterinario'
         $('#exampleModalCenter').modal('toggle');
         const veterinaria = veterinarias[index];
-
-
         nombre.value = veterinaria.nombre;
         apellido.value = veterinaria.apellido;
         pais.value = veterinaria.pais;
         identificacion.value = veterinaria.identificacion;
         indice.value=index;
+            
+$("#btn-x").on("click",function() {
+    resetModal();
+    });
+
+$("#btn-cerrar1").on("click",function() {
+    resetModal();
+});
         
 
     }
 }
 
-function reserModal(){
+function resetModal(){
     nombre.value ='';
     apellido.value='';
-    pais.value='';
+    pais.value='País';
     identificacion.value='';
     btnGuardar.innerHTML='Crear';
+    lbtitulo.innerHTML = 'Nuevo Veterinario'
+    btnGuardar.innerHTML='Crear'
+
+
 }
 
-function eliminar(index) {
+function eliminar(index){
     return function clickEnEliminar() {
-    veterinarias = veterinarias.filter((veterinaria, indiceVeterinaria)=>indiceVeterinaria !== index);
-    listarVeterinarias();
-    }
+        $('#exampleModalCenter2').modal('toggle');
+        const veterinaria = veterinarias[index];
+        nombre.value = veterinaria.nombre;
+        apellido.value = veterinaria.apellido;
+        pais.value = veterinaria.pais;
+        identificacion.value = veterinaria.identificacion;
+        indice.value=index;
+
+    $("#btn-eliminar2").on("click",function() {
+        veterinarias = veterinarias.filter((veterinaria, indiceVeterinaria)=>indiceVeterinaria!== index);
+        listarVeterinarias();
+    });
 }
+    
+}
+
 
 listarVeterinarias();
 

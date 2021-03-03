@@ -85,7 +85,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalCenterTitle">Nueva Veterinario</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-x">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -125,12 +125,35 @@
             </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-cerrar1">Cerrar</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="btn-guardar">Crear</button>
             </div>
             </div>
         </div>
     </div>
+
+
+
+        <!-- MODAL PARA ELIMINAR-->
+        <div class="modal fade" data-backdrop="static" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Mensaje de confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-x2">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>¿Desea eliminar este Veterinario?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-cerrar2">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btn-eliminar2">Eliminar</button>
+            </div>
+            </div>
+            </div>
+            </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
