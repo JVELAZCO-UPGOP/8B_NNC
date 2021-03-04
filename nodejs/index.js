@@ -37,10 +37,12 @@ const callbackDelServidor= (req, res) => {
           }
       
           //3.4.3 revisar si tiene subrutas en este caso es el indice del array
+          let indice = null;
           if (rutaLimpia.indexOf("/") > -1) {
-            var [rutaPrincipal, indice] = rutaLimpia.split("/");
+            indice = rutaLimpia.split("/");
+            rutaLimpia = indice[0];
+            indice = indice[1];
           }
-
         //ordenar data
         const data ={
             ruta: rutaLimpia,
@@ -53,8 +55,8 @@ const callbackDelServidor= (req, res) => {
         console.log({data});
         //Elegir el manejador de la ruta y asignar la funcion que el enrutador tiene
         let handler;
-        if(ruta && enrutador[ruta]){
-            handler = enrutador[ruta];
+        if(ruta && enrutador[rutaLimpia]){
+            handler = enrutador[rutaLimpia];
         }
         else{
             handler=enrutador.noEncontrado;
