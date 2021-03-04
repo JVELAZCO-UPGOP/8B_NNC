@@ -108,7 +108,6 @@ function resetModal(){
     identificacion.value='';
     btnGuardar.innerHTML='Crear';
     lbtitulo.innerHTML = 'Nuevo Veterinario'
-    btnGuardar.innerHTML='Crear'
 
 
 }
