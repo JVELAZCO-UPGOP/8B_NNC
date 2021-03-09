@@ -2,6 +2,16 @@ const http = require('http');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 
+let recursos ={
+    mascotas: [
+        {tipo: "Perro", nombre: "Lus", dueno: "Nora"},
+        {tipo: "Gato", nombre: "Miss", dueno: "Melissa"},
+        {tipo: "Pez", nombre: "Susy", dueno: "Karen"},
+        {tipo: "Pez", nombre: "asl", dueno: "Nora"},
+        {tipo: "Perro", nombre: "Mory", dueno: "Melissa"},
+    ],
+};
+
 const callbackDelServidor= (req, res) => {
     //Obtener url desde el objeto request
     const urlActual = req.url;
@@ -34,15 +44,16 @@ const callbackDelServidor= (req, res) => {
 
         if (headers["content-type"] === "application/json") {
             buffer = JSON.parse(buffer);
-          }
-      
+        }
+
           //3.4.3 revisar si tiene subrutas en este caso es el indice del array
-          let indice = null;
-          if (rutaLimpia.indexOf("/") > -1) {
+        let indice = null;
+        if (rutaLimpia.indexOf("/") > -1) {
             indice = rutaLimpia.split("/");
             rutaLimpia = indice[0];
             indice = indice[1];
-          }
+        }
+
         //ordenar data
         const data ={
             ruta: rutaLimpia,
@@ -55,8 +66,8 @@ const callbackDelServidor= (req, res) => {
         console.log({data});
         //Elegir el manejador de la ruta y asignar la funcion que el enrutador tiene
         let handler;
-        if(ruta && enrutador[rutaLimpia]){
-            handler = enrutador[rutaLimpia];
+        if(ruta && enrutador[rutaLimpia] && enrutador[rutaLimpia][metodo]){
+            handler = enrutador[rutaLimpia][metodo];
         }
         else{
             handler=enrutador.noEncontrado;
@@ -82,8 +93,14 @@ const enrutador = {
     ruta: (data, callback) => {
         callback(200, { mensaje: 'esta es /ruta'});
     },
-    usuarios: (data, callback) => {
-        callback(200, [{nombre: "usuario 1"}, {nombre: "usuario 2"}]);
+    mascotas: {
+        get: (data, callback) => {
+        callback(200, recursos.mascotas );
+    },
+    post: (data, callback) => {
+        recursos.mascotas.push(data.payload);
+        callback(201, data.payload);
+    },
     },
     noEncontrado: (data, callback) => {
         callback(404, {mensaje: 'no encontrado' });
