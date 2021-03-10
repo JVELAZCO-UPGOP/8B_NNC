@@ -1,3 +1,7 @@
+const url = require("url");
+const StringDecoder = require("string_decoder").StringDecoder;
+const enrutador = require("./enrutador");
+
 module.exports= (req, res) => {
     //Obtener url desde el objeto request
     const urlActual = req.url;

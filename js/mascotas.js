@@ -7,9 +7,9 @@ const btnGuardar = document.getElementById('btn-guardar');
 const btneliminar = document.getElementById('btn-eliminar2');
 const btnCerrar = document.getElementById('btn-cerrar1');
 const lbtitulo = document.getElementById('exampleModalCenterTitle');
-const listaMascotas = document.getElementById('lista-mascotas');
+const listaveterinarias = document.getElementById('lista-veterinarias');
 
-let mascotas = [
+let veterinarias = [
     {
         tipo: "Perro",
         nombre: "Luna",
@@ -24,8 +24,8 @@ let mascotas = [
 ];
 
 
-function listarMascotas() {
-const htmlMascotas = mascotas.map((mascota, index)=>`<tr>
+function listarveterinarias() {
+const htmlveterinarias = veterinarias.map((mascota, index)=>`<tr>
     <th scope="row">${index}</th>
     <td>${mascota.tipo}</td>
     <td>${mascota.nombre}</td>
@@ -37,7 +37,7 @@ const htmlMascotas = mascotas.map((mascota, index)=>`<tr>
         </div>
     </td>
     </tr>`).join("");
-    listaMascotas.innerHTML = htmlMascotas;
+    listaveterinarias.innerHTML = htmlveterinarias;
     Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=>botonEditar.onclick = editar(index));
     Array.from(document.getElementsByClassName('eliminar')).forEach((botonEliminar, index)=>botonEliminar.onclick = eliminar(index));
 
@@ -53,13 +53,13 @@ const datos = {
 const accion = btnGuardar.innerHTML;
 switch(accion) {
     case 'Editar':
-    mascotas[indice.value] = datos;
+    veterinarias[indice.value] = datos;
     break;
     default:
-    mascotas.push(datos);
+    veterinarias.push(datos);
     break;
 }
-listarMascotas();
+listarveterinarias();
 resetModal();
 }
 
@@ -68,7 +68,7 @@ return function DarClick() {
     btnGuardar.innerHTML = 'Editar'
     lbtitulo.innerHTML = 'Editar Mascota'
     $('#exampleModalCenter').modal('toggle');
-    const mascota = mascotas[index];
+    const mascota = veterinarias[index];
     nombre.value = mascota.nombre;
     dueno.value = mascota.dueno;
     tipo.value = mascota.tipo;
@@ -100,15 +100,15 @@ lbtitulo.innerHTML = 'Nueva Mascota'
 function eliminar(index){
     return function clickEnEliminar() {
         $('#exampleModalCenter2').modal('toggle');
-        const mascota = mascotas[index];
+        const mascota = veterinarias[index];
         nombre.value = mascota.nombre;
         dueno.value = mascota.dueno;
         tipo.value = mascota.tipo;
         indice.value = index;
 
     $("#btn-eliminar2").on("click",function() {
-        mascotas = mascotas.filter((mascota, indiceMascota)=>indiceMascota !== index);
-        listarMascotas();
+        veterinarias = veterinarias.filter((mascota, indiceMascota)=>indiceMascota !== index);
+        listarveterinarias();
     });
 }
     
@@ -117,7 +117,7 @@ function eliminar(index){
 
 
 
-listarMascotas();
+listarveterinarias();
 
 form.onsubmit = enviarDatos;
 btnGuardar.onclick = enviarDatos;
