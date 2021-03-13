@@ -7,25 +7,21 @@ const btnGuardar = document.getElementById('btn-guardar');
 const btneliminar = document.getElementById('btn-eliminar2');
 const btnCerrar = document.getElementById('btn-cerrar1');
 const lbtitulo = document.getElementById('exampleModalCenterTitle');
-const listaveterinarias = document.getElementById('lista-veterinarias');
+const listamascotas = document.getElementById('lista-mascotas');
+const url= "http://localhost:5000/mascotas";
 
-let veterinarias = [
-    {
-        tipo: "Perro",
-        nombre: "Luna",
-        dueno: "Nora"
-    },
-
-    {
-        tipo: "Gato",
-        nombre: "Aly",
-        dueno: "Karen"
-    }
-];
+let mascotas = [];
 
 
-function listarveterinarias() {
-const htmlveterinarias = veterinarias.map((mascota, index)=>`<tr>
+async function listarmascotas() {
+    try {
+        const respuesta = await fetch(url);
+        const mascotasDelServer = await respuesta.json();
+        if(Array.isArray(mascotasDelServer)){
+            mascotas = mascotasDelServer;
+        }
+        if (mascotas.length > 0) {
+        const htmlmascotas = mascotas.map((mascota, index)=>`<tr>
     <th scope="row">${index}</th>
     <td>${mascota.tipo}</td>
     <td>${mascota.nombre}</td>
@@ -37,30 +33,61 @@ const htmlveterinarias = veterinarias.map((mascota, index)=>`<tr>
         </div>
     </td>
     </tr>`).join("");
-    listaveterinarias.innerHTML = htmlveterinarias;
+    listamascotas.innerHTML = htmlmascotas;
     Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=>botonEditar.onclick = editar(index));
     Array.from(document.getElementsByClassName('eliminar')).forEach((botonEliminar, index)=>botonEliminar.onclick = eliminar(index));
-
+        return;
+        
+    } 
+    listaMascotas.innerHTML = `<tr>
+        <td colspan="5" class="lista-vacia">No hay mascotas para mostrar</td>
+    </tr>`;
 }
+    catch (error) {
+        throw error;
+    }
+}
+    
 
-function enviarDatos(evento) {
+
+async function enviarDatos(evento) {
 evento.preventDefault();
-const datos = {
-    tipo: tipo.value,
-    nombre: nombre.value,
-    dueno: dueno.value
-};
-const accion = btnGuardar.innerHTML;
-switch(accion) {
-    case 'Editar':
-    veterinarias[indice.value] = datos;
-    break;
-    default:
-    veterinarias.push(datos);
-    break;
+try {
+    const datos = {
+        tipo: tipo.value,
+        nombre: nombre.value,
+        dueno: dueno.value
+    };
+    let method = "POST";
+    let urlEnvio = url;
+    const accion = btnGuardar.innerHTML;
+    if(accion === "Editar") {
+            method = "PUT";
+            mascotas[indice.value] = datos;
+            urlEnvio = `${url}/${indice.value}`;
+    }
+    const respuesta = await fetch(urlEnvio, {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datos),
+        mode: "cors",
+        });
+    
+    if(respuesta.ok){
+        listarmascotas();
+        resetModal();
+        }
+    
+} catch (error) {
+    throw error;
 }
-listarveterinarias();
-resetModal();
+
+
+
+
+
 }
 
 function editar(index) {
@@ -68,7 +95,7 @@ return function DarClick() {
     btnGuardar.innerHTML = 'Editar'
     lbtitulo.innerHTML = 'Editar Mascota'
     $('#exampleModalCenter').modal('toggle');
-    const mascota = veterinarias[index];
+    const mascota = mascotas[index];
     nombre.value = mascota.nombre;
     dueno.value = mascota.dueno;
     tipo.value = mascota.tipo;
@@ -100,15 +127,15 @@ lbtitulo.innerHTML = 'Nueva Mascota'
 function eliminar(index){
     return function clickEnEliminar() {
         $('#exampleModalCenter2').modal('toggle');
-        const mascota = veterinarias[index];
+        const mascota = mascotas[index];
         nombre.value = mascota.nombre;
         dueno.value = mascota.dueno;
         tipo.value = mascota.tipo;
         indice.value = index;
 
     $("#btn-eliminar2").on("click",function() {
-        veterinarias = veterinarias.filter((mascota, indiceMascota)=>indiceMascota !== index);
-        listarveterinarias();
+        mascotas = mascotas.filter((mascota, indiceMascota)=>indiceMascota !== index);
+        listarmascotas();
     });
 }
     
@@ -117,7 +144,9 @@ function eliminar(index){
 
 
 
-listarveterinarias();
+listarmascotas();
+
+
 
 form.onsubmit = enviarDatos;
 btnGuardar.onclick = enviarDatos;
