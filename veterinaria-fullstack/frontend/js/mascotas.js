@@ -44,7 +44,8 @@ async function listarmascotas() {
     </tr>`;
 }
     catch (error) {
-        throw error;
+        console.log({ error });
+      $(".alert").show();
     }
 }
     
@@ -81,7 +82,8 @@ try {
         }
     
 } catch (error) {
-    throw error;
+    console.log({ error });
+      $(".alert").show();
 }
 
 
