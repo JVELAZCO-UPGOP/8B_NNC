@@ -9,32 +9,25 @@ const indice = document.getElementById('indice');
 const btneliminar = document.getElementById('btn-eliminar2');
 const lbtitulo = document.getElementById('exampleModalCenterTitle');
 const btnCerrar = document.getElementById('btn-cerrar1');
+const url= "http://localhost:5000/veterinarias";
 
 
 
-let veterinarias = [
-    {
-        nombre: "Noraly",
-        apellido: "Niño",
-        pais: "México",
-        identificacion: "1235"
-    },
 
-    {
-        nombre: "Luis",
-        apellido: "Coronado",
-        pais: "México",
-        identificacion: "1893"
-    }
-
-];
+let veterinarias = [];
 
 
-function listarVeterinarias() {
-    const htmlVeterinarias = veterinarias.map((veterinaria, index)=>`<tr>
+async function listarVeterinarias() {
+    try {
+    const respuesta = await fetch(url);
+        const veterinariasDelServer = await respuesta.json();
+        if(Array.isArray(veterinariasDelServer)){
+            veterinarias = veterinariasDelServer;
+        }
+        if(veterinarias.length>0){
+            const htmlVeterinarias = veterinarias.map((veterinaria, index)=>`<tr>
     <th scope="row">${index}</th>
-    <td>${veterinaria.identificacion}</td>
-    <td>${veterinaria.pais}</td>
+    <td>${veterinaria.documento}</td>
     <td>${veterinaria.nombre}</td>
     <td>${veterinaria.apellido}</td>
     <td>
@@ -48,9 +41,18 @@ function listarVeterinarias() {
 listaVeterinarias.innerHTML =htmlVeterinarias;
 Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=> botonEditar.onclick = editar(index));
 Array.from(document.getElementsByClassName('eliminar')).forEach((botonEliminar, index)=> botonEliminar.onclick = eliminar(index));
-
-
+        return;
 }
+listaVeterinarias.innerHTML = `<tr>
+    <td colspan="5" class="lista-vacia">No hay veterinarias</td>
+    </tr>`;
+    } catch (error) {
+    console.log({ error });
+    $(".alert").show();
+    }
+}
+
+
 
 
 function enviardatos(evento){
