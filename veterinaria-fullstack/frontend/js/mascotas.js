@@ -122,9 +122,32 @@ btnGuardar.innerHTML = 'Crear'
 lbtitulo.innerHTML = 'Nueva Mascota'
 }
 
-
-
 function eliminar(index){
+    const urlEnvio = `${url}/${index}`;
+    return async function clickEnEliminar() {
+
+        try {
+            const respuesta = await fetch(urlEnvio, {
+            method: "DELETE",
+            });
+
+            if(respuesta.ok){
+                
+                listarmascotas();
+                resetModal();
+
+            }
+        } catch (error) {
+            console.log({ error });
+        $(".alert").show();
+        }
+        
+    };
+}
+
+
+
+/*function eliminar(index){
     return function clickEnEliminar() {
         $('#exampleModalCenter2').modal('toggle');
         const mascota = mascotas[index];
@@ -139,7 +162,7 @@ function eliminar(index){
     });
 }
     
-}
+}*/
 
 
 
