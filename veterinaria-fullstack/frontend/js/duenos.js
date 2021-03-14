@@ -9,30 +9,24 @@ const indice = document.getElementById('indice');
 const btneliminar = document.getElementById('btn-eliminar2');
 const lbtitulo = document.getElementById('exampleModalCenterTitle');
 const btnCerrar = document.getElementById('btn-cerrar1');
+const url= "http://localhost:5000/veterinarias";
 
-let duenos = [
-    {
-        nombre: "Noraly",
-        apellido: "Niño",
-        pais: "México",
-        identificacion: "1235"
-    },
-
-    {
-        nombre: "Luis",
-        apellido: "Coronado",
-        pais: "México",
-        identificacion: "1893"
-    }
-
-];
+let duenos = [];
 
 
-function listarDuenos() {
-    const htmlDuenos = duenos.map((dueno, index)=>`<tr>
+async function listarDuenos() {
+    try {
+        const respuesta = await fetch(url);
+        const duenosDelServer = await respuesta.json();
+        if(Array.isArray(duenosDelServer)){
+            duenos = duenosDelServer;
+        }
+        if(duenos.length > 0 ) {
+            const htmlDuenos = duenos
+            .map(
+                (dueno, index) =>`<tr>
     <th scope="row">${index}</th>
-    <td>${dueno.identificacion}</td>
-    <td>${dueno.pais}</td>
+    <td>${dueno.documento}</td>
     <td>${dueno.nombre}</td>
     <td>${dueno.apellido}</td>
     <td>
@@ -41,17 +35,63 @@ function listarDuenos() {
         <button type="button" class="btn btn-danger eliminar"><i class="far fa-trash-alt"></i></button>
     </div>
     </td>
-</tr>`).join("");
+</tr>`
+)
+.join("");
 
 listaDuenos.innerHTML =htmlDuenos;
 Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=> botonEditar.onclick = editar(index));
 Array.from(document.getElementsByClassName('eliminar')).forEach((botonEliminar, index)=> botonEliminar.onclick = eliminar(index));
-
-
+        return;
+}
+listaDuenos.innerHTML = `<tr>
+    <td colspan="5" class="lista-vacia">No hay dueños</td>
+    </tr>`;
+    } catch (error) {
+    console.log({ error });
+    $(".alert").show();
+    }
 }
 
 
-function enviardatos(evento){
+async function enviardatos(evento) {
+    evento.preventDefault();
+    try {
+        const datos = {
+        nombre: nombre.value,
+        apellido: apellido.value,
+        documento: documento.value,
+        };
+        let method = "POST";
+        let urlEnvio = url;
+        const accion = btnGuardar.innerHTML;
+        if (accion === "Editar") {
+            method = "PUT";
+            urlEnvio += `/${indice.value}`;
+        }
+        const respuesta = await fetch(urlEnvio, {
+        method,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+        mode: "cors",
+        });
+
+        if (respuesta.ok) {
+            listarDuenos();
+            resetModal();
+            }
+
+    } catch (error) {
+        console.log({ error });
+        $(".alert").show();
+    }
+    }
+
+
+
+/*function enviardatos(evento){
     
     evento.preventDefault();
     const datos={
@@ -74,8 +114,37 @@ function enviardatos(evento){
     listarDuenos();
     reserModal();
 }
+*/
 
 function editar(index) {
+    return function DarClick(){
+        btnGuardar.innerHTML='Editar'
+        lbtitulo.innerHTML = 'Editar Dueño'
+        $('#exampleModalCenter').modal('toggle');
+        const dueno = duenos[index];
+        indice.value=index;
+        nombre.value = dueno.nombre;
+        apellido.value = dueno.apellido;
+        documento.value = dueno.documento;
+            
+$("#btn-x").on("click",function() {
+    resetModal();
+    });
+
+$("#btn-cerrar1").on("click",function() {
+    resetModal();
+});
+        
+
+    }
+}
+
+
+
+
+
+
+/*function editar(index) {
     return function handler(){
         btnGuardar.innerHTML='Editar'
         lbtitulo.innerHTML = 'Editar Dueño'
@@ -97,13 +166,12 @@ function editar(index) {
         
 
     }
-}
+}*/
 
 function resetModal(){
     nombre.value ='';
     apellido.value='';
-    pais.value='País';
-    identificacion.value='';
+    documento.value='';
     btnGuardar.innerHTML='Crear';
     lbtitulo.innerHTML = 'Nuevo Veterinario'
 }
