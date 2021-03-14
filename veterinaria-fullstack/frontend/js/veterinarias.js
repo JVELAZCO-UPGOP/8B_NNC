@@ -151,6 +151,28 @@ function resetModal(){
 
 }
 
+function eliminar(index){
+    const urlEnvio = `${url}/${index}`;
+    return async function clickEnEliminar() {
+
+        try {
+            const respuesta = await fetch(urlEnvio, {
+            method: "DELETE",
+            });
+
+            if(respuesta.ok){
+                
+                listarVeterinarias();
+                resetModal();
+
+            }
+        } catch (error) {
+            console.log({ error });
+        $(".alert").show();
+        }
+        
+    };
+}
 
 
 /*function eliminar(index){
