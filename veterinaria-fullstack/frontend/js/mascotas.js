@@ -39,7 +39,7 @@ async function listarmascotas() {
         return;
         
     } 
-    listaMascotas.innerHTML = `<tr>
+    listamascotas.innerHTML = `<tr>
         <td colspan="5" class="lista-vacia">No hay mascotas para mostrar</td>
     </tr>`;
 }

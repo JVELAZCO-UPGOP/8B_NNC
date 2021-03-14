@@ -1,7 +1,6 @@
 const listaVeterinarias = document.getElementById('lista-veterinarias');
-const pais = document.getElementById('pais');
 const nombre = document.getElementById('nombre');
-const identificacion = document.getElementById('identificacion');
+const documento = document.getElementById('documento');
 const apellido = document.getElementById('apellido');
 const form = document.getElementById('form');
 const btnGuardar = document.getElementById('btn-guardar');
@@ -19,13 +18,15 @@ let veterinarias = [];
 
 async function listarVeterinarias() {
     try {
-    const respuesta = await fetch(url);
+        const respuesta = await fetch(url);
         const veterinariasDelServer = await respuesta.json();
         if(Array.isArray(veterinariasDelServer)){
             veterinarias = veterinariasDelServer;
         }
-        if(veterinarias.length>0){
-            const htmlVeterinarias = veterinarias.map((veterinaria, index)=>`<tr>
+        if(veterinarias.length > 0 ) {
+            const htmlVeterinarias = veterinarias
+            .map(
+                (veterinaria, index) =>`<tr>
     <th scope="row">${index}</th>
     <td>${veterinaria.documento}</td>
     <td>${veterinaria.nombre}</td>
@@ -36,7 +37,9 @@ async function listarVeterinarias() {
         <button type="button" class="btn btn-danger eliminar"><i class="far fa-trash-alt"></i></button>
     </div>
     </td>
-</tr>`).join("");
+</tr>`
+)
+.join("");
 
 listaVeterinarias.innerHTML =htmlVeterinarias;
 Array.from(document.getElementsByClassName('editar')).forEach((botonEditar, index)=> botonEditar.onclick = editar(index));
@@ -55,29 +58,40 @@ listaVeterinarias.innerHTML = `<tr>
 
 
 
-function enviardatos(evento){
-    
+async function enviardatos(evento) {
     evento.preventDefault();
-    const datos={
+    try {
+        const datos = {
         nombre: nombre.value,
         apellido: apellido.value,
-        pais: pais.value,
-        identificacion: identificacion.value
-    };
-    const accion = btnGuardar.innerHTML;
-    switch(accion){
-        case 'Editar':
-            veterinarias[indice.value]=datos;
-            break;
-            default:
-            veterinarias.push(datos);
-            break;
+        documento: documento.value,
+        };
+        let method = "POST";
+        let urlEnvio = url;
+        const accion = btnGuardar.innerHTML;
+        if (accion === "Editar") {
+            method = "PUT";
+            urlEnvio += `/${indice.value}`;
+        }
+        const respuesta = await fetch(urlEnvio, {
+        method,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datos),
+        mode: "cors",
+        });
+
+        if (respuesta.ok) {
+            listarVeterinarias();
+            resetModal();
+            }
+
+    } catch (error) {
+        console.log({ error });
+        $(".alert").show();
     }
-    
-    
-    listarVeterinarias();
-    reserModal();
-}
+    }
 
 function editar(index) {
     return function DarClick(){
@@ -85,11 +99,10 @@ function editar(index) {
         lbtitulo.innerHTML = 'Editar Veterinario'
         $('#exampleModalCenter').modal('toggle');
         const veterinaria = veterinarias[index];
+        indice.value=index;
         nombre.value = veterinaria.nombre;
         apellido.value = veterinaria.apellido;
-        pais.value = veterinaria.pais;
-        identificacion.value = veterinaria.identificacion;
-        indice.value=index;
+        documento.value = veterinaria.documento;
             
 $("#btn-x").on("click",function() {
     resetModal();
@@ -103,25 +116,50 @@ $("#btn-cerrar1").on("click",function() {
     }
 }
 
+
+/*function editar(index) {
+    return function DarClick(){
+        btnGuardar.innerHTML='Editar'
+        lbtitulo.innerHTML = 'Editar Veterinario'
+        $('#exampleModalCenter').modal('toggle');
+        const veterinaria = veterinarias[index];
+        nombre.value = veterinaria.nombre;
+        apellido.value = veterinaria.apellido;
+        pais.value = veterinaria.pais;
+        documento.value = veterinaria.documento;
+        indice.value=index;
+            
+$("#btn-x").on("click",function() {
+    resetModal();
+    });
+
+$("#btn-cerrar1").on("click",function() {
+    resetModal();
+});
+        
+
+    }
+}*/
+
 function resetModal(){
     nombre.value ='';
     apellido.value='';
-    pais.value='País';
-    identificacion.value='';
+    documento.value='';
     btnGuardar.innerHTML='Crear';
     lbtitulo.innerHTML = 'Nuevo Veterinario'
 
 
 }
 
-function eliminar(index){
+
+
+/*function eliminar(index){
     return function clickEnEliminar() {
         $('#exampleModalCenter2').modal('toggle');
         const veterinaria = veterinarias[index];
         nombre.value = veterinaria.nombre;
         apellido.value = veterinaria.apellido;
-        pais.value = veterinaria.pais;
-        identificacion.value = veterinaria.identificacion;
+        documento.value = veterinaria.documento;
         indice.value=index;
 
     $("#btn-eliminar2").on("click",function() {
@@ -130,7 +168,7 @@ function eliminar(index){
     });
 }
     
-}
+}*/
 
 
 listarVeterinarias();
