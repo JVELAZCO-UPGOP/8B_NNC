@@ -1,10 +1,12 @@
 const listaConsultas = document.getElementById("lista-consultas");
 const mascota = document.getElementById("mascota");
+const veterinaria = document.getElementById("veterinaria");
 
 
 
 let consultas = [];
 let mascotas = [];
+let veterinarias = [];
 const url = "http://localhost:5000";
 
 async function listarConsultas() {
@@ -69,3 +71,28 @@ async function listarMascotas() {
   
 
   listarMascotas();
+
+
+  async function listarVeterinarias() {
+    const entidad = "veterinarias";
+    try {
+      const respuesta = await fetch(`${url}/${entidad}`);
+      const veterinariasDelServidor = await respuesta.json();
+      if (Array.isArray(veterinariasDelServidor)) {
+        veterinarias = veterinariasDelServidor;
+      }
+      if (respuesta.ok) {
+        veterinarias.forEach((_veterinaria, indice) => {
+          const optionActual = document.createElement("option");
+          optionActual.innerHTML = `${_veterinaria.nombre} ${_veterinaria.apellido}`;
+          optionActual.value = indice;
+          veterinaria.appendChild(optionActual);
+        });
+      }
+    } catch (error) {
+      console.log({ error });
+      $(".alert-danger").show();
+    }
+  }
+
+  listarVeterinarias();
