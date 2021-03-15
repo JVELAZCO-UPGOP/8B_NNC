@@ -150,38 +150,45 @@ async function listarMascotas() {
           listarConsultas();
           resetModal();
         }
+        formulario.classList.add("was-validated");
         return;
 
       }
 
       $(".alert-warning").show();
-      
     } catch (error) {
       console.log({ error });
       $(".alert-danger").show();
     }
   }
 
-
   function resetModal() {
-    indice.value ="";
     btnGuardar.innerHTML = "Crear";
-    mascota.value ="";
-    veterinaria.value ="";
-    historia.value ="";
-    diagnostico.value="";
-    $('#exampleModalCenter').modal('toggle');
+    [indice, mascota, veterinaria, historia, diagnostico].forEach(
+      (inputActual) => {
+        inputActual.value = "";
+        inputActual.classList.remove("is-invalid");
+        inputActual.classList.remove("is-valid");
+      }
+    );
+    $(".alert-warning").hide();
+    $("#exampleModalCenter").modal("toggle");
   }
-  
   function validar(datos) {
     if (typeof datos !== "object") return false;
+    let respuesta = true;
     for (let llave in datos) {
-      if (datos[llave].length === 0) return false;
-      } 
-
-      return true;
+      if (datos[llave].length === 0) {
+        document.getElementById(llave).classList.add("is-invalid");
+        respuesta = false;
+      } else {
+        document.getElementById(llave).classList.remove("is-invalid");
+        document.getElementById(llave).classList.add("is-valid");
       }
-  
+    }
+    if (respuesta === true) $(".alert-warning").hide();
+    return respuesta;
+  }
 
 
   btnGuardar.onclick = enviarDatos;
