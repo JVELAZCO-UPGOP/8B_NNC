@@ -51,7 +51,6 @@ async function listarConsultas() {
   }
 }
 
-listarConsultas();
 
 
 async function listarMascotas() {
@@ -76,7 +75,7 @@ async function listarMascotas() {
   }
   
 
-  listarMascotas();
+
 
 
   async function listarVeterinarias() {
@@ -101,8 +100,7 @@ async function listarMascotas() {
     }
   }
 
-  listarVeterinarias();
-
+ 
 
 
   function editar(index) {
@@ -117,3 +115,49 @@ async function listarMascotas() {
       diagnostico.value = consulta.diagnostico;
     };
   }
+
+
+  async function enviarDatos(evento) {
+    const entidad = "consultas";
+    evento.preventDefault();
+    try {
+      const datos = {
+        mascota: mascota.value,
+        veterinaria: veterinaria.value,
+        historia: historia.value,
+        diagnostico: diagnostico.value,
+      };
+      const accion = btnGuardar.innerHTML;
+      let urlEnvio = `${url}/${entidad}`;
+      let method = "POST";
+        if (accion === "Editar") {
+          urlEnvio += `/${indice.value}`;
+          method = "PUT";
+        }
+        const respuesta = await fetch(urlEnvio, {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(datos),
+          mode: "cors",
+        });
+        if (respuesta.ok) {
+          listarConsultas();
+          //resetModal();
+        }
+    } catch (error) {
+      console.log({ error });
+      $(".alert-danger").show();
+    }
+  }
+  
+
+
+  btnGuardar.onclick = enviarDatos;
+
+  listarConsultas();
+
+  listarMascotas();
+
+  listarVeterinarias();
