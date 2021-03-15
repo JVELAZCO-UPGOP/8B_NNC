@@ -1,7 +1,10 @@
 const listaConsultas = document.getElementById("lista-consultas");
 const mascota = document.getElementById("mascota");
 const veterinaria = document.getElementById("veterinaria");
-
+const btnGuardar = document.getElementById("btn-guardar");
+const indice = document.getElementById("indice");
+const historia = document.getElementById("historia");
+const diagnostico = document.getElementById("diagnostico");
 
 
 let consultas = [];
@@ -38,6 +41,9 @@ async function listarConsultas() {
         )
         .join("");
       listaConsultas.innerHTML = htmlConsultas;
+      Array.from(document.getElementsByClassName("editar")).forEach(
+        (botonEditar, index) => (botonEditar.onclick = editar(index))
+      );
       
     }
   } catch (error) {
@@ -96,3 +102,18 @@ async function listarMascotas() {
   }
 
   listarVeterinarias();
+
+
+
+  function editar(index) {
+    return function cuandoCliqueo() {
+      btnGuardar.innerHTML = "Editar";
+      $("#exampleModalCenter").modal("toggle");
+      const consulta = consultas[index];
+      indice.value = index;
+      mascota.value = consulta.mascota.id;
+      veterinaria.value = consulta.veterinaria.id;
+      historia.value = consulta.historia;
+      diagnostico.value = consulta.diagnostico;
+    };
+  }
