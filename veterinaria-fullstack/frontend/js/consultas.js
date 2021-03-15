@@ -1,0 +1,44 @@
+const listaConsultas = document.getElementById("lista-consultas");
+
+
+
+let consultas = [];
+const url = "http://localhost:5000/consultas";
+
+async function listarConsultas() {
+  const entidad = "consultas";
+  try {
+    const respuesta = await fetch(url);
+    const consultasDelServidor = await respuesta.json();
+    if (Array.isArray(consultasDelServidor)) {
+      consultas = consultasDelServidor;
+    }
+    if (respuesta.ok) {
+      const htmlConsultas = consultas
+        .map(
+          (consulta, indice) =>
+            `<tr>
+          <th scope="row">${indice}</th>
+          <td>${consulta.mascota}</td>
+          <td>${consulta.veterinaria}</td>
+          <td>${consulta.diagnostico}</td>
+          <td>${consulta.fechaCreacion}</td>
+          <td>${consulta.fechaEdicion}</td>
+          
+          <td>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-info editar"><i class="fas fa-edit"></i></button>
+              </div>
+          </td>
+        </tr>`
+        )
+        .join("");
+      listaConsultas.innerHTML = htmlConsultas;
+      
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+listarConsultas();
