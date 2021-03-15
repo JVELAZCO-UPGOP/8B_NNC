@@ -127,7 +127,9 @@ async function listarMascotas() {
         historia: historia.value,
         diagnostico: diagnostico.value,
       };
-      const accion = btnGuardar.innerHTML;
+      if (validar(datos) === true){
+
+        const accion = btnGuardar.innerHTML;
       let urlEnvio = `${url}/${entidad}`;
       let method = "POST";
         if (accion === "Editar") {
@@ -146,6 +148,12 @@ async function listarMascotas() {
           listarConsultas();
           resetModal();
         }
+        return;
+
+      }
+
+      alert("formulario incompleto");
+      
     } catch (error) {
       console.log({ error });
       $(".alert-danger").show();
@@ -163,6 +171,14 @@ async function listarMascotas() {
     $('#exampleModalCenter').modal('toggle');
   }
   
+  function validar(datos) {
+    if (typeof datos !== "object") return false;
+    for (let llave in datos) {
+      if (datos[llave].length === 0) return false;
+      } 
+
+      return true;
+      }
   
 
 
