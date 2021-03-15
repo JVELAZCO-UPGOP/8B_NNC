@@ -144,13 +144,25 @@ async function listarMascotas() {
         });
         if (respuesta.ok) {
           listarConsultas();
-          //resetModal();
+          resetModal();
         }
     } catch (error) {
       console.log({ error });
       $(".alert-danger").show();
     }
   }
+
+
+  function resetModal() {
+    indice.value ="";
+    btnGuardar.innerHTML = "Crear";
+    mascota.value ="";
+    veterinaria.value ="";
+    historia.value ="";
+    diagnostico.value="";
+    $('#exampleModalCenter').modal('toggle');
+  }
+  
   
 
 
