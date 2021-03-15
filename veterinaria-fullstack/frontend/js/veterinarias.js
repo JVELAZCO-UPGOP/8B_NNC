@@ -8,7 +8,7 @@ const indice = document.getElementById('indice');
 const btneliminar = document.getElementById('btn-eliminar2');
 const lbtitulo = document.getElementById('exampleModalCenterTitle');
 const btnCerrar = document.getElementById('btn-cerrar1');
-const url= "http://localhost:5000/veterinarias";
+const url= "https://veterinaria-backend-olive.vercel.app/veterinarias";
 
 
 

@@ -10,7 +10,7 @@ const diagnostico = document.getElementById("diagnostico");
 let consultas = [];
 let mascotas = [];
 let veterinarias = [];
-const url = "http://localhost:5000";
+const url = "https://veterinaria-backend-olive.vercel.app/consultas";
 
 async function listarConsultas() {
   const entidad = "consultas";
