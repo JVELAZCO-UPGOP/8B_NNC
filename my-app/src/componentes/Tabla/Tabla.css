@@ -1,0 +1,11 @@
+.table{
+    width: 95%;
+    margin-left: 31px;
+    margin-bottom: 1rem;
+    color: #212529;
+    text-align: center;
+}
+
+table{
+    border-collapse: collapse;
+}

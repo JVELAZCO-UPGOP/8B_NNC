@@ -1,0 +1,12 @@
+.thead-light th{
+    color: black;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.table thead th{
+    padding: .75rem;
+    vertical-align: bottom;
+    border-top: 1px solid #dee2e6;
+    border-bottom:  1px solid #dee2e6;
+}
